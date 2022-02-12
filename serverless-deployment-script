@@ -1,14 +1,17 @@
-#1. Create a EMR cluster
+#1. Upload hit-data file to S3
+aws s3 cp Data[82].tsv s3://adobe-sailendra-staging/
+
+#2. Create a EMR cluster
 aws emr create-cluster --auto-scaling-role EMR_AutoScaling_DefaultRole --applications Name=Hadoop Name=Spark Name=Livy Name=Hive Name=JupyterEnterpriseGateway Name=JupyterHub --tags 'creator=NOTEBOOK_CONSOLE' --ebs-root-volume-size 10 --ec2-attributes '{"KeyName":"emr_cluster","InstanceProfile":"EMR_EC2_DefaultRole","SubnetId":"subnet-4a059206","EmrManagedSlaveSecurityGroup":"sg-06400a2c66fcf303d","EmrManagedMasterSecurityGroup":"sg-09c6b89ac75170ed2"}' --service-role EMR_DefaultRole --enable-debugging --release-label emr-5.34.0 --log-uri 's3n://aws-logs-463961516505-us-east-2/elasticmapreduce/' --name 'EMRCluster' --instance-groups '[{"InstanceCount":1,"EbsConfiguration":{"EbsBlockDeviceConfigs":[{"VolumeSpecification":{"SizeInGB":32,"VolumeType":"gp2"},"VolumesPerInstance":2}]},"InstanceGroupType":"MASTER","InstanceType":"m5.xlarge","Name":"Master Instance Group"}]' --scale-down-behavior TERMINATE_AT_TASK_COMPLETION --region us-east-2
 
-#2. Get cluster id
+#3. Get cluster id
 aws emr list-clusters --active
 
-#3. Copy PySpark file to master node of EMR
+#4. Copy PySpark file to master node of EMR
 scp -i emr_cluster.pem Downloads/Analytics.py hadoop@ec2-18-191-160-68.us-east-2.compute.amazonaws.com:
 
-#4. SSH to the aforementioned master node
+#5. SSH to the aforementioned master node
 aws emr ssh --cluster-id j-XRGFYZ53F2N1 --key-pair-file emr_cluster.pem
 
-#5. Execute PySpark script
+#6. Execute PySpark script
 [hadoop@ip-172-31-45-78 ~]$spark-submit Analytics.py s3://adobe-sailendra-staging/data[82].tsv
