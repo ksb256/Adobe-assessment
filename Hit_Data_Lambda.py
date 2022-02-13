@@ -7,11 +7,12 @@ Key parameters
 -JobFlowRole (Service role for EC2)
 -ServiceRole (Service role for Amazon EMR)
 
-The following parameters are additional parameters for the Spark job itself. Change the bucket name and prefix for the Spark job (located at the bottom).
+The following parameters are additional parameters for the Spark job itself.
 
 -s3://adobe-sailendra-staging/adobe-hit-data-analytics.py (PySpark file)
 -s3://adobe-sailendra-staging/data[82].tsv (Input data file in S3)
 """
+
 import json
 import boto3
 
