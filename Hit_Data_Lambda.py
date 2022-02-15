@@ -7,12 +7,11 @@ Key parameters
 -JobFlowRole (Service role for EC2)
 -ServiceRole (Service role for Amazon EMR)
 
-The following parameters are additional parameters for the Spark job itself.
+The following parameters are additional parameters for the Spark job itself. Change the bucket name and prefix for the Spark job (located at the bottom).
 
--s3://adobe-sailendra-staging/adobe-hit-data-analytics.py (PySpark file)
+-s3://adobe-sailendra-staging/Analytics.py (PySpark file)
 -s3://adobe-sailendra-staging/data[82].tsv (Input data file in S3)
 """
-
 import json
 import boto3
 
@@ -25,7 +24,7 @@ def lambda_handler(event, context):
     response = client.run_job_flow(
         Name= 'spark_job_cluster',
         LogUri= 's3://aws-logs-463961516505-us-east-2/elasticmapreduce/',
-        ReleaseLabel= 'emr-6.0.0',
+        ReleaseLabel= 'emr-5.34.0',
         Instances={
             'MasterInstanceType': 'm5.xlarge',
             'SlaveInstanceType': 'm5.large',
@@ -34,7 +33,14 @@ def lambda_handler(event, context):
             'TerminationProtected': False,
             'Ec2SubnetId': 'subnet-4a059206'
         },
-        Applications = [ {'Name': 'Spark'} ],
+        Applications = [ 
+            {
+                'Name': 'Spark'
+            },
+            {
+                'Name': 'Hive'
+            }
+        ],
         Configurations = [
             { 'Classification': 'spark-hive-site',
               'Properties': {
@@ -50,14 +56,13 @@ def lambda_handler(event, context):
                 'ActionOnFailure': 'TERMINATE_CLUSTER',
                 'HadoopJarStep': {
                     "Jar": "command-runner.jar",
-                        'Args': [
-                            'spark-submit',
-                            '--deploy-mode', 'cluster',
-                            '--conf','spark.yarn.submit.waitAppCompletion=false',
-                            's3://adobe-sailendra-staging/adobe-hit-data-analytics.py',
-                            's3://adobe-sailendra-staging/data[82].tsv'
-                        ]
+                    'Args': [
+                        'spark-submit',
+                        's3://adobe-sailendra-staging/Analytics.py',
+                        's3://adobe-sailendra-staging/data[82].tsv'
+                    ]
                 }
             }
         ]
     )
+    print(response)
