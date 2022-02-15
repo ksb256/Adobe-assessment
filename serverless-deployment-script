@@ -1,5 +1,0 @@
-#1. Upload hit-data file to S3 that triggers the Lambda function (#2)
-aws s3 cp Data[82].tsv s3://adobe-sailendra-staging/
-
-#2. Create a Lambda function that spins up EMR cluster and runs our py script and uploads the result tsv file to a S3 location (serverless)
-Refer Hit_Data_Lambda.py
