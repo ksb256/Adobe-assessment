@@ -24,6 +24,11 @@ Resources:
               Ref: Bucket1
             Events:
               - 's3:ObjectCreated:*'
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: .tsv
       Tags:
         'lambda-console:blueprint': s3-get-object-python
   Bucket1:
