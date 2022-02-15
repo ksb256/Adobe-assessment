@@ -1,5 +1,5 @@
-#1. Upload hit-data file to S3 that triggers the Lambda function (#2)
-aws s3 cp Data[82].tsv s3://adobe-sailendra-staging/
+#1. Upload PySpark and hit-data files to S3 that triggers the Lambda function (#2)
+aws s3 cp Analytics.py Data[82].tsv s3://adobe-sailendra-staging/
 
 #2. Create below Lambda function with trigger on PUT objects on 'adobe-sailendra-staging' S3 bucket with tsv prefix. 
 # This would spin up a transient EMR cluster with step function that runs the pyspark script and uploads the result tsv files to a S3 location
