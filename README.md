@@ -8,6 +8,6 @@ Given a simple tab separated file which contains "hit level data". A hit level r
    
 # Solution:
 
-1. Copy the source hit data TSV file and the [pyspark script](https://github.com/sailendrakalyanam/Adobe-assessment/blob/main/com/sailendra/data/Analytics.py) that answers the client's question to S3
+1. Copy the source hit data TSV file and the [pyspark script](https://github.com/sailendrakalyanam/Adobe-assessment/blob/main/com/sailendra/data/Analytics.py) that answers the client's question to S3. For convenience, result is shown [here](https://github.com/sailendrakalyanam/Adobe-assessment/blob/main/final_result)
       
 2. Create a [Lambda function](https://github.com/sailendrakalyanam/Adobe-assessment/blob/main/serverless-deployment-script.py) that has a trigger on the above S3 bucket for TSV files. This function would spin up a transient EMR cluster with step to run this pyspark script and auto-terminates upon script's execution.
